@@ -1,0 +1,131 @@
+Challenge 1: Data Cleaning and Formatting
+Exercise 1: Cleaning Column Names
+To ensure consistency and ease of use, standardize the column names of the dataframe. Start by taking a first look at the dataframe and identifying any column names that need to be modified. Use appropriate naming conventions and make sure that column names are descriptive and informative.
+
+import pandas as pd
+import numpy as np
+
+df1 = pd.read_csv('https://raw.githubusercontent.com/data-bootcamp-v4/data/main/file1.csv')
+df1
+
+Exercise 2: Cleaning invalid Values
+The dataset contains columns with inconsistent and incorrect values that could affect the accuracy of our analysis. Therefore, we need to clean these columns to ensure that they contain only valid data. For example, the gender column contains various inconsistent values such as "F", "M", "Femal", "Male", "female", which need to be standardized.
+
+Note that this exercise will focus only on cleaning inconsistent values and will not involve handling null values (NaN or None).
+
+def clean_gender_column(df1: pd.DataFrame) -> pd.DataFrame:
+    '''
+    This function will take a Pandas DataFrame as an input and it will replace the values in
+    the "GENDER" column ins such a way that any gender which is not Male or Female with be 
+    replaced by "U" otherwise the genders will be either "F" or "M"
+
+    Inputs:
+    df: Pandas DataFrame
+
+    Outputs:
+    A pandas DataFrame with the values in the "gender" column cleaned.
+    '''
+
+    df2 = df1.copy()
+    
+    df2[['GENDER']] = df2[['GENDER']].astype(str)
+
+    if "GENDER" not in df2.columns:
+        return df2
+    else:
+        #df2['GENDER'] = df2['GENDER'].apply(lambda x: x[0].upper if x[0].upper in ['M', 'F'] else "U")
+        df2['GENDER'] = list(map(lambda x: x[0].upper() if x[0].upper() in ['M', 'F'] else "U", df2['GENDER']))
+        return df2
+
+df=clean_gender_column(df1)
+df
+
+clean_gender_column(df1)['GENDER'].unique() 
+
+Exercise 3: Formatting data types
+The data types of many columns in the dataset appear to be incorrect. This could impact the accuracy of our analysis. To ensure accurate analysis, we need to correct the data types of these columns. Please update the data types of the columns as appropriate.
+
+It is important to note that this exercise does not involve handling null values (NaN or None).
+
+df1.dtypes
+
+Exercise 4: Dealing with Null values
+Identify any columns with null or missing values. Identify how many null values each column has. You can use the isnull() function in pandas to find columns with null values.
+
+Decide on a strategy for handling the null values. There are several options, including:
+
+Drop the rows or columns with null values
+Fill the null values with a specific value (such as the column mean or median for numerical variables and mode for categorical variables)
+Fill the null values with the previous or next value in the column
+Fill the null values based on a more complex algorithm or model (we haven't studied this yet)
+Implement your chosen strategy to handle the null values. You can use the fillna() function in pandas to fill null values or dropna() function to drop null values.
+
+Verify that your strategy has successfully handled the null values. You can use the isnull() function again to check if there are still null values in the dataset.
+
+Remember to document your process and explain your reasoning for choosing a particular strategy for handling null values.
+
+After formatting data types, as a last step, convert all the numeric variables to integers using applymap.
+
+Save the cleaned dataset to a new CSV file.
+
+df1.isnull().sum()
+
+df2 = df1.dropna() #some rows are fully Nan and their previous and next columns are Nan too. It is not working to use the previous or next value in the column.
+display(df2)
+
+df2.isnull().sum()
+
+Exercise 5: Dealing with duplicates
+Use the .duplicated() method to identify any duplicate rows in the dataframe.
+
+Decide on a strategy for handling the duplicates. Options include:
+
+Dropping all duplicate rows
+Keeping only the first occurrence of each duplicated row
+Keeping only the last occurrence of each duplicated row
+Dropping duplicates based on a subset of columns
+Dropping duplicates based on a specific column
+Implement your chosen strategy using the drop_duplicates() function.
+
+Verify that your strategy has successfully handled the duplicates by checking for duplicates again using .duplicated().
+
+Remember to document your process and explain your reasoning for choosing a particular strategy for handling duplicates.
+
+Save the cleaned dataset to a new CSV file.
+
+df1.duplicated()
+
+df1_no_duplicates = df1.drop_duplicates()
+print(df1_no_duplicates)
+df1_no_duplicates.duplicated()
+
+df1_no_duplicates.to_csv('df1_no_duplicates.csv',index = False, sep=";")
+
+Challenge 2: creating functions on a separate py file
+
+functions.py file is added.
+
+Challenge 3: Analyzing Clean and Formated Data
+You have been tasked with analyzing the data to identify potential areas for improving customer retention and profitability. Your goal is to identify customers with a high policy claim amount and a low customer lifetime value.
+
+In Pandas Lab, we only looked at high policy claim amounts because we couldn't look into low customer lifetime values. If we tried to do work with that column, we wouldn't have been able to do it because customer lifetime value wasn't clean and in its proper format. So after cleaning and formatting the data, lets get some more interesting insights!
+
+Instructions:
+
+Review again the statistics for total claim amount and customer lifetime value to gain an understanding of the data.
+To identify potential areas for improving customer retention and profitability, we want to focus on customers with a high policy claim amount and a low customer lifetime value. Consider customers with a high policy claim amount to be those in the top 25% of the total claim amount, and clients with a low customer lifetime value to be those in the bottom 25% of the customer lifetime value. Create a pandas DataFrame object that contains information about customers with a policy claim amount greater than the 75th percentile and a customer lifetime value in the bottom 25th percentile.
+Use DataFrame methods to calculate summary statistics about the high policy claim amount and low customer lifetime value data. To do so, select both columns of the dataframe simultaneously and pass it to the .describe() method. This will give you descriptive statistics, such as mean, median, standard deviation, minimum and maximum values for both columns at the same time, allowing you to compare and analyze their characteristics.
+
+df2 = df1.loc[:,['Total Claim Amount','Customer Lifetime Value']]
+display(df2)
+print(df2.describe())
+
+df3 = df2.dropna()
+
+display(df3)
+
+df3['Customer Lifetime Value'] = df3['Customer Lifetime Value'].str.replace('%', '')
+
+df3[['Customer Lifetime Value']] = df3[['Customer Lifetime Value']].astype(float)
+
+df3[(df3['Total Claim Amount'] > df3['Total Claim Amount'].quantile(0.75)) & (df3['Customer Lifetime Value'] < df3['Customer Lifetime Value'].quantile(0.25))]
