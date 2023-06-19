@@ -63,6 +63,6 @@ def drop_duplicates(df1: pd.DataFrame) -> pd.DataFrame:
     '''
     
     df2 = df1.copy()
-    df3 = df2.drop_duplicates())
+    df3 = df2.drop_duplicates()
     return df3
 
