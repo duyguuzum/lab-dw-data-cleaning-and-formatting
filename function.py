@@ -4,7 +4,7 @@
 # In[ ]:
 
 
-def clean_gender_column(df1: pd.DataFrame) -> pd.DataFrame
+def clean_gender_column(df1: pd.DataFrame) -> pd.DataFrame:
     '''
     This function will take a Pandas DataFrame as an input and it will replace the values in\n",
     the \"GENDER\" column ins such a way that any gender which is not Male or Female with be \n",
@@ -32,7 +32,7 @@ def clean_gender_column(df1: pd.DataFrame) -> pd.DataFrame
 # In[ ]:
 
 
-def drop_null(df1: pd.DataFrame) -> pd.DataFrame
+def drop_null(df1: pd.DataFrame) -> pd.DataFrame:
     '''
     This function will drop null values from df1
    
@@ -51,7 +51,7 @@ def drop_null(df1: pd.DataFrame) -> pd.DataFrame
 # In[ ]:
 
 
-def drop_duplicates(df1: pd.DataFrame) -> pd.DataFrame
+def drop_duplicates(df1: pd.DataFrame) -> pd.DataFrame:
     '''
     This function will drop duplicates  from df1
     
