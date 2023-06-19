@@ -25,7 +25,7 @@ def clean_gender_column(df1: pd.DataFrame) -> pd.DataFrame:
     else:
     
         #df2['GENDER'] = df2['GENDER'].apply(lambda x: x[0].upper if x[0].upper in ['M', 'F'] else \"U\")\n",
-        df2['GENDER'] = list(map(lambda x: x[0].upper() if x[0].upper() in ['M', 'F'] else \"U\", df2['GENDER']))
+        df2['GENDER'] = list(map(lambda x: x[0].upper() if x[0].upper() in ['M', 'F'] else "U", df2['GENDER']))
         return df2"
 
 
